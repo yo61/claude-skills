@@ -1,0 +1,23 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Built skill bundles (regenerated from source)
+*.skill
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
+
+# Python (in case scripts get added later)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Node
+node_modules/

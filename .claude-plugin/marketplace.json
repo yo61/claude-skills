@@ -1,0 +1,25 @@
+{
+  "name": "yo61-skills",
+  "owner": {
+    "name": "yo61",
+    "email": "robin@yo61.com"
+  },
+  "description": "Claude Code skills published by yo61",
+  "plugins": [
+    {
+      "name": "contributory-factors",
+      "source": "./plugins/contributory-factors",
+      "description": "Replaces 'root cause' thinking with contributory factors analysis based on the London Protocol 2024.",
+      "version": "1.0.0",
+      "category": "thinking",
+      "keywords": [
+        "incident-analysis",
+        "post-mortem",
+        "debugging",
+        "systems-thinking",
+        "safety",
+        "root-cause-analysis"
+      ]
+    }
+  ]
+}

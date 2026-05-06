@@ -1,0 +1,12 @@
+{
+  "name": "contributory-factors",
+  "version": "1.0.0",
+  "description": "Replaces 'root cause' thinking with contributory factors analysis based on the London Protocol 2024 and the Yorkshire Contributory Factors Framework.",
+  "author": {
+    "name": "Robin Bowes",
+    "email": "robin@yo61.com"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/yo61/claude-skills",
+  "repository": "https://github.com/yo61/claude-skills"
+}
