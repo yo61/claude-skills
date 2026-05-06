@@ -1,0 +1,12 @@
+{
+  "name": "reportlab-pdf",
+  "version": "1.0.0",
+  "description": "Generate professional, multi-page PDF documents using Python's ReportLab Platypus layout engine. Covers document setup, paragraph styles, flowables, typography, colour, bullet points, horizontal rules, and pagination.",
+  "author": {
+    "name": "Robin Bowes",
+    "email": "robin@yo61.com"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/yo61/claude-skills",
+  "repository": "https://github.com/yo61/claude-skills"
+}

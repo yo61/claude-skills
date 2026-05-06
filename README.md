@@ -22,6 +22,7 @@ Then install whichever plugin you want:
 | Plugin | Description |
 | ------ | ----------- |
 | [`contributory-factors`](plugins/contributory-factors) | Replaces "root cause" thinking with contributory factors analysis based on the London Protocol 2024 and the Yorkshire Contributory Factors Framework. |
+| [`reportlab-pdf`](plugins/reportlab-pdf) | Generate professional, multi-page PDF documents using Python's ReportLab Platypus layout engine. |
 
 ## Updating
 
@@ -44,14 +45,14 @@ Then reinstall a plugin to pick up its newest version:
 ├── .claude-plugin/
 │   └── marketplace.json          # marketplace manifest (lists plugins)
 ├── plugins/
-│   └── contributory-factors/     # one directory per plugin
+│   └── <plugin-name>/            # one directory per plugin
 │       ├── .claude-plugin/
 │       │   └── plugin.json       # plugin manifest
 │       ├── README.md
 │       └── skills/
-│           └── contributory-factors/
+│           └── <skill-name>/
 │               ├── SKILL.md
-│               └── references/
+│               └── references/   # optional supporting material
 └── README.md
 ```
 
