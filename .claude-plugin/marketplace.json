@@ -20,6 +20,24 @@
         "safety",
         "root-cause-analysis"
       ]
+    },
+    {
+      "name": "reportlab-pdf",
+      "source": "./plugins/reportlab-pdf",
+      "description": "Generate professional, multi-page PDF documents using Python's ReportLab Platypus layout engine.",
+      "version": "1.0.0",
+      "category": "document-generation",
+      "keywords": [
+        "pdf",
+        "reportlab",
+        "platypus",
+        "document",
+        "cv",
+        "report",
+        "letter",
+        "invoice",
+        "typography"
+      ]
     }
   ]
 }
