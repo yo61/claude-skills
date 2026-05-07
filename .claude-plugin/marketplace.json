@@ -24,13 +24,16 @@
     {
       "name": "reportlab-pdf",
       "source": "./plugins/reportlab-pdf",
-      "description": "Generate professional, multi-page PDF documents using Python's ReportLab Platypus layout engine.",
-      "version": "1.0.0",
+      "description": "ReportLab-based PDF generation. Two skills: programmatic Platypus PDFs (CVs, invoices, reports) and a markdown-to-PDF renderer (mistune + Platypus).",
+      "version": "1.1.0",
       "category": "document-generation",
       "keywords": [
         "pdf",
         "reportlab",
         "platypus",
+        "markdown",
+        "mistune",
+        "md-to-pdf",
         "document",
         "cv",
         "report",

@@ -22,6 +22,8 @@ Use ReportLab Platypus when you need to **create** a PDF from structured content
 
 This skill is *not* for manipulating existing PDFs (use pypdf), extracting text (use pdfplumber), or filling forms (use pdf-lib). If you need those, use the built-in `pdf` skill instead.
 
+If the source is **markdown** (a `.md` file, a markdown string, or pasted markdown text) and the user wants a styled PDF, prefer the `md-to-pdf` skill in this plugin — it ships an end-to-end renderer (mistune + Platypus) and handles parsing, styling, and pagination for you. Use this skill directly when you're building PDFs programmatically from data (a dict, JSON, query results) and need fine-grained layout control beyond what markdown can express.
+
 ## Installation
 
 In a uv project:

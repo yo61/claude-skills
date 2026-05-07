@@ -1,30 +1,29 @@
 # reportlab-pdf
 
-A Claude skill for generating professional, multi-page PDF documents using
-Python's [ReportLab](https://www.reportlab.com/) library and its
-[Platypus](https://docs.reportlab.com/reportlab/userguide/ch5_platypus/) layout
-engine.
+A Claude Code plugin for generating PDFs with Python's
+[ReportLab](https://www.reportlab.com/) library and its
+[Platypus](https://docs.reportlab.com/reportlab/userguide/ch5_platypus/)
+layout engine. The plugin contains two skills:
 
-When this plugin is active, Claude can:
+| Skill | Purpose |
+| ----- | ------- |
+| `reportlab-pdf` | Programmatic PDF generation — Claude writes ReportLab code directly to lay out a CV, invoice, report, or letter from structured data. |
+| `md-to-pdf` | Markdown → PDF — Claude copies a self-contained renderer (mistune + Platypus) into your project and converts a `.md` file to a styled PDF. |
 
-- Set up `SimpleDocTemplate` with sensible margins and page sizes (A4, Letter).
-- Build documents from a list of flowables (paragraphs, horizontal rules,
-  spacers, page breaks) that paginate automatically.
-- Define and apply `ParagraphStyle` definitions with correct `leading` to
-  prevent overlapping text — the most common ReportLab layout bug.
-- Use the built-in Helvetica / Times / Courier families without installing
-  fonts, and register TTF files when custom fonts are needed.
-- Apply colour, bullet points, justified text, inline HTML markup
-  (`<b>`, `<i>`, `<sub>`, `<super>`, `<a>`), and horizontal rules.
-- Avoid common pitfalls (XML escaping of `&`, `<`, `>`, `'`; Unicode
-  super/subscript glyphs missing from Helvetica; duplicate style names).
+## When each skill triggers
+
+- `md-to-pdf` triggers on **markdown input or markdown intent** —
+  `.md` files, pasted markdown, phrases like "convert markdown to PDF" or
+  "render this README as a PDF".
+- `reportlab-pdf` triggers on **programmatic PDF generation** — phrases
+  like "build a PDF CV", "generate a PDF invoice from this data",
+  "make a PDF report from this JSON".
 
 ## Scope
 
-This skill covers **creating** PDFs from structured content — CVs, reports,
-letters, invoices, and similar documents where the layout is generated
-programmatically. It does **not** cover reading, merging, splitting, or
-form-filling existing PDFs; for those, use Claude Code's built-in `pdf` skill.
+This plugin covers **creating** PDFs from structured content (markdown or
+data). It does **not** cover reading, merging, splitting, or form-filling
+existing PDFs; for those, use Claude Code's built-in `pdf` skill.
 
 ## Installation
 
@@ -36,13 +35,18 @@ marketplace:
 /plugin install reportlab-pdf@yo61-skills
 ```
 
-ReportLab itself is installed per the user's Python tooling. Following the
-project's standards, prefer `uv`:
+ReportLab and (for `md-to-pdf`) mistune are installed per the user's
+Python tooling. Following the project's standards, prefer `uv`:
 
 ```bash
-uv add reportlab          # in a uv project
-uv pip install reportlab  # ad-hoc / no project
+uv add reportlab mistune          # in a uv project
+uv pip install reportlab mistune  # ad-hoc / no project
 ```
+
+For one-shot markdown conversions, you can skip installation entirely —
+the bundled `md_to_pdf.py` carries
+[PEP 723](https://peps.python.org/pep-0723/) inline metadata and runs
+under `uv run --no-project`.
 
 ## What's in the plugin
 
@@ -50,12 +54,15 @@ uv pip install reportlab  # ad-hoc / no project
 reportlab-pdf/
 ├── .claude-plugin/
 │   └── plugin.json
+├── README.md
 └── skills/
-    └── reportlab-pdf/
-        └── SKILL.md   # the skill itself
+    ├── reportlab-pdf/
+    │   └── SKILL.md
+    └── md-to-pdf/
+        ├── SKILL.md
+        └── scripts/
+            └── md_to_pdf.py
 ```
-
-`SKILL.md` is loaded into Claude's context when the skill triggers.
 
 ## License
 
