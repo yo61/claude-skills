@@ -22,7 +22,7 @@ Then install whichever plugin you want:
 | Plugin | Description |
 | ------ | ----------- |
 | [`contributory-factors`](plugins/contributory-factors) | Replaces "root cause" thinking with contributory factors analysis based on the London Protocol 2024 and the Yorkshire Contributory Factors Framework. |
-| [`reportlab-pdf`](plugins/reportlab-pdf) | Generate professional, multi-page PDF documents using Python's ReportLab Platypus layout engine. |
+| [`reportlab-pdf`](plugins/reportlab-pdf) | ReportLab-based PDF generation. Two skills: programmatic Platypus PDFs (CVs, invoices, reports) and markdown-to-PDF (`md-to-pdf`, via mistune + Platypus). |
 
 ## Updating
 
