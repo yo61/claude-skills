@@ -104,7 +104,7 @@ def build_default_styles(palette: Palette = DEFAULT_PALETTE) -> StyleSheet1:
     """Return a stylesheet covering every style key the renderer expects."""
     styles = getSampleStyleSheet()
 
-    def add(name: str, **kwargs: Any) -> None:
+    def add(name: str, **kwargs: str | float | Color) -> None:
         styles.add(ParagraphStyle(name, **kwargs))
 
     add(
@@ -226,11 +226,13 @@ class PlatypusRenderer:
         palette: Palette = DEFAULT_PALETTE,
         options: RenderOptions | None = None,
     ) -> None:
+        """Build a renderer with an optional stylesheet, palette, and options."""
         self.styles = styles if styles is not None else build_default_styles(palette)
         self.palette = palette
         self.options = options or RenderOptions()
 
     def render(self, tokens: list[dict[str, Any]]) -> list[Flowable]:
+        """Walk a list of mistune block tokens and return Platypus flowables."""
         out: list[Flowable] = []
         for tok in tokens:
             out.extend(self._block(tok))
@@ -394,6 +396,7 @@ _PAGE_SIZES = {"a4": A4, "letter": letter}
 
 
 def main() -> None:
+    """Parse CLI arguments and write a PDF from the source markdown file."""
     ap = argparse.ArgumentParser(description="Render a markdown file to PDF")
     ap.add_argument("source", type=Path, help="Markdown input file")
     ap.add_argument("-o", "--output", type=Path, help="PDF output path")
