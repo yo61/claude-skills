@@ -25,10 +25,10 @@ CLI
 ---
 ::
 
-    python -m internals.scripts.md_to_pdf input.md [-o output.pdf]
-                                                   [--show-link-urls]
-                                                   [--page-size {a4,letter}]
-                                                   [--margins-mm 20]
+    python md_to_pdf.py input.md [-o output.pdf]
+                                 [--show-link-urls]
+                                 [--page-size {a4,letter}]
+                                 [--margins-mm 20]
 
 Supported markdown
 ------------------
