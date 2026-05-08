@@ -25,7 +25,7 @@
       "name": "reportlab-pdf",
       "source": "./plugins/reportlab-pdf",
       "description": "ReportLab-based PDF generation. Two skills: programmatic Platypus PDFs (CVs, invoices, reports) and a markdown-to-PDF renderer (mistune + Platypus).",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "category": "document-generation",
       "keywords": [
         "pdf",

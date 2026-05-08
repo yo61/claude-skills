@@ -356,14 +356,20 @@ class PlatypusRenderer:
 def render_markdown(
     md_text: str,
     *,
+    renderer: PlatypusRenderer | None = None,
     styles: StyleSheet1 | None = None,
     palette: Palette = DEFAULT_PALETTE,
     options: RenderOptions | None = None,
 ) -> list[Flowable]:
-    """Parse markdown text and return a list of Platypus Flowables."""
+    """Parse markdown text and return a list of Platypus Flowables.
+
+    When ``renderer`` is provided the ``styles``/``palette``/``options`` args
+    are ignored — the caller has already configured them on the renderer.
+    """
     parser = mistune.create_markdown(renderer=None)
     tokens = cast("list[dict[str, Any]]", parser(md_text))
-    renderer = PlatypusRenderer(styles=styles, palette=palette, options=options)
+    if renderer is None:
+        renderer = PlatypusRenderer(styles=styles, palette=palette, options=options)
     return renderer.render(tokens)
 
 
@@ -371,12 +377,17 @@ def write_pdf(
     source: Path,
     output: Path | None = None,
     *,
+    renderer: PlatypusRenderer | None = None,
     page_size: tuple[float, float] = A4,
     margins_mm: float = 20.0,
     palette: Palette = DEFAULT_PALETTE,
     options: RenderOptions | None = None,
 ) -> Path:
-    """Read a markdown file and write a styled PDF; return the output path."""
+    """Read a markdown file and write a styled PDF; return the output path.
+
+    Pass ``renderer`` to use a custom subclass (e.g. for domain-specific
+    layouts); otherwise the default ``PlatypusRenderer`` is used.
+    """
     md = source.read_text(encoding="utf-8")
     out = output if output is not None else source.with_suffix(".pdf")
     doc = SimpleDocTemplate(
@@ -387,7 +398,12 @@ def write_pdf(
         leftMargin=margins_mm * mm,
         rightMargin=margins_mm * mm,
     )
-    flowables = render_markdown(md, palette=palette, options=options)
+    flowables = render_markdown(
+        md,
+        renderer=renderer,
+        palette=palette,
+        options=options,
+    )
     doc.build(flowables)
     return out
 

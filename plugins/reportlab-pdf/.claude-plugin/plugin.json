@@ -1,6 +1,6 @@
 {
   "name": "reportlab-pdf",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "ReportLab-based PDF generation. Includes the reportlab-pdf skill (programmatic Platypus PDFs) and the md-to-pdf skill (markdown files → styled PDFs via mistune + Platypus).",
   "author": {
     "name": "Robin Bowes",

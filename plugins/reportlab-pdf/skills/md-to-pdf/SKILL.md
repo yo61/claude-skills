@@ -67,11 +67,12 @@ When triggered, do this in order:
 
 `md_to_pdf.py` exposes (full docstrings in the file):
 
-- `write_pdf(source, output=None, *, page_size, margins_mm, palette, options)`
+- `write_pdf(source, output=None, *, renderer, page_size, margins_mm, palette, options)`
   — read a markdown file, write a styled PDF, return the output path.
-- `render_markdown(md_text, *, styles, palette, options)` — parse markdown
-  text and return a list of Platypus `Flowable`s for embedding into a larger
-  document.
+- `render_markdown(md_text, *, renderer, styles, palette, options)` — parse
+  markdown text and return a list of Platypus `Flowable`s for embedding into
+  a larger document. Pass a configured `PlatypusRenderer` via `renderer=` to
+  plug in a subclass; otherwise the default is used.
 - `PlatypusRenderer` — walks a mistune AST and emits Flowables; subclass to
   customise output.
 - `Palette` — colour palette with fields `dark`, `accent`, `grey`, `rule`,
