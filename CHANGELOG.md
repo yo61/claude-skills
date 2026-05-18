@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.2](https://github.com/yo61/claude-skills/compare/v0.2.1...v0.2.2) (2026-05-18)
+
+
+### Bug Fixes
+
+* **reportlab-pdf:** bump to v1.2.1 ([f7e19ca](https://github.com/yo61/claude-skills/commit/f7e19ca57e1fd8584d00ca6373220ac8d2385068))
+* **reportlab-pdf:** bump to v1.2.1 ([31351e8](https://github.com/yo61/claude-skills/commit/31351e86a1ea807b786d90714056c170eac2fb49))
+
 ## [0.2.1](https://github.com/yo61/claude-skills/compare/v0.2.0...v0.2.1) (2026-05-18)
 
 
