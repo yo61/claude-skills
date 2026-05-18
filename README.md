@@ -1,77 +1,34 @@
-# yo61 Claude Skills
+# yo61-skills
 
-A [Claude Code plugin marketplace](https://code.claude.com/docs/en/plugin-marketplaces)
-hosting skills published by [yo61](https://github.com/yo61).
+A Claude Code plugin marketplace published by [yo61](https://github.com/yo61).
 
-## Installation
+## Plugins
 
-Add this marketplace to Claude Code:
+| Plugin | Repo | Description |
+|---|---|---|
+| `contributory-factors` | [`yo61/claude-plugin-contributory-factors`](https://github.com/yo61/claude-plugin-contributory-factors) | Replaces "root cause" thinking with contributory factors analysis (London Protocol 2024, Yorkshire Contributory Factors Framework). |
+| `reportlab-pdf` | [`yo61/claude-plugin-reportlab-pdf`](https://github.com/yo61/claude-plugin-reportlab-pdf) | ReportLab-based PDF generation. Programmatic Platypus PDFs (CVs, invoices, reports) and a markdown-to-PDF renderer (mistune + Platypus). |
 
-```text
+## Use
+
+In Claude Code:
+
+```
 /plugin marketplace add yo61/claude-skills
+/plugin install contributory-factors
+/plugin install reportlab-pdf
 ```
 
-Then install whichever plugin you want:
-
-```text
-/plugin install <plugin-name>@yo61-skills
-```
-
-## Available plugins
-
-| Plugin | Description |
-| ------ | ----------- |
-| [`contributory-factors`](plugins/contributory-factors) | Replaces "root cause" thinking with contributory factors analysis based on the London Protocol 2024 and the Yorkshire Contributory Factors Framework. |
-| [`reportlab-pdf`](plugins/reportlab-pdf) | ReportLab-based PDF generation. Two skills: programmatic Platypus PDFs (CVs, invoices, reports) and markdown-to-PDF (`md-to-pdf`, via mistune + Platypus). |
-
-## Updating
-
-Pull the latest plugin manifests:
-
-```text
-/plugin marketplace update yo61-skills
-```
-
-Then reinstall a plugin to pick up its newest version:
-
-```text
-/plugin install <plugin-name>@yo61-skills
-```
-
-## Repository layout
+Refresh your local copy of the marketplace after a new release with:
 
 ```
-.
-├── .claude-plugin/
-│   └── marketplace.json          # marketplace manifest (lists plugins)
-├── plugins/
-│   └── <plugin-name>/            # one directory per plugin
-│       ├── .claude-plugin/
-│       │   └── plugin.json       # plugin manifest
-│       ├── README.md
-│       └── skills/
-│           └── <skill-name>/
-│               ├── SKILL.md
-│               └── references/   # optional supporting material
-└── README.md
+/plugin marketplace update
 ```
 
-Each plugin is self-contained under `plugins/<name>/` with its own manifest,
-versioning, and documentation. The top-level `marketplace.json` lists every
-plugin in the repo and points at its subdirectory via a relative path.
+## Versioning
 
-## Adding a new plugin
-
-1. Create `plugins/<plugin-name>/.claude-plugin/plugin.json`.
-2. Put skills under `plugins/<plugin-name>/skills/<skill-name>/SKILL.md`.
-3. Add an entry for the plugin to `.claude-plugin/marketplace.json`.
-4. Document the plugin in its own `plugins/<plugin-name>/README.md` and add
-   a row to the table above.
-
-## Contributing
-
-Issues and pull requests welcome.
+This is a [release-please](https://github.com/googleapis/release-please)-managed marketplace. Each entry in `marketplace.json` pins to an exact release tag of its plugin repo. When a plugin cuts a new release, this marketplace bumps its `ref` and cuts its own release.
 
 ## License
 
-[MIT](LICENSE)
+MIT — see [LICENSE](LICENSE).

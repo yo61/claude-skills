@@ -5,29 +5,31 @@
     "email": "robin@yo61.com"
   },
   "description": "Claude Code skills published by yo61",
+  "version": "0.1.0",
   "plugins": [
     {
       "name": "contributory-factors",
-      "source": "./plugins/contributory-factors",
-      "description": "Replaces 'root cause' thinking with contributory factors analysis based on the London Protocol 2024.",
-      "version": "1.0.0",
+      "description": "Replaces 'root cause' thinking with contributory factors analysis based on the London Protocol 2024 and the Yorkshire Contributory Factors Framework.",
       "category": "thinking",
-      "keywords": [
+      "tags": [
         "incident-analysis",
         "post-mortem",
         "debugging",
         "systems-thinking",
         "safety",
         "root-cause-analysis"
-      ]
+      ],
+      "source": {
+        "source": "github",
+        "repo": "yo61/claude-plugin-contributory-factors",
+        "ref": "v1.0.0"
+      }
     },
     {
       "name": "reportlab-pdf",
-      "source": "./plugins/reportlab-pdf",
       "description": "ReportLab-based PDF generation. Two skills: programmatic Platypus PDFs (CVs, invoices, reports) and a markdown-to-PDF renderer (mistune + Platypus).",
-      "version": "1.2.0",
       "category": "document-generation",
-      "keywords": [
+      "tags": [
         "pdf",
         "reportlab",
         "platypus",
@@ -40,7 +42,12 @@
         "letter",
         "invoice",
         "typography"
-      ]
+      ],
+      "source": {
+        "source": "github",
+        "repo": "yo61/claude-plugin-reportlab-pdf",
+        "ref": "v1.2.0"
+      }
     }
   ]
 }
