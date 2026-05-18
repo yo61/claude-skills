@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/yo61/claude-skills/compare/v0.1.1...v0.2.0) (2026-05-18)
+
+
+### Features
+
+* add plugin-release-bump workflow for marketplace auto-updates ([5158451](https://github.com/yo61/claude-skills/commit/51584516aaffdc88c47eb62a807999576c5b302a)), closes [#12](https://github.com/yo61/claude-skills/issues/12)
+
 ## [0.1.1](https://github.com/yo61/claude-skills/compare/v0.1.0...v0.1.1) (2026-05-18)
 
 

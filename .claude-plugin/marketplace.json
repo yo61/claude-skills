@@ -5,7 +5,7 @@
     "email": "robin@yo61.com"
   },
   "description": "Claude Code skills published by yo61",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "plugins": [
     {
       "name": "contributory-factors",
