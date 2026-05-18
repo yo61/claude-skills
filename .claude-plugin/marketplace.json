@@ -46,7 +46,7 @@
       "source": {
         "source": "url",
         "url": "https://github.com/yo61/claude-plugin-reportlab-pdf.git",
-        "ref": "v1.2.0"
+        "ref": "v1.2.1"
       }
     }
   ]
