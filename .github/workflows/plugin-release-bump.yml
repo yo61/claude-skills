@@ -1,0 +1,93 @@
+name: Plugin release bump
+
+# Receives a `repository_dispatch: plugin-released` event from one of the plugin
+# repos when it cuts a new release. Bumps that plugin's `source.ref` in
+# marketplace.json, opens a `fix(<plugin>): bump to <tag>` PR, and enables
+# auto-merge so the PR ships once CI passes. release-please then picks up the
+# fix: commit on main and cuts the next marketplace patch release.
+
+on:
+  repository_dispatch:
+    types: [plugin-released]
+
+permissions: {}
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1  # v3.2.0
+        id: app-token
+        with:
+          client-id: ${{ secrets.SEMANTIC_RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.SEMANTIC_RELEASE_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          fetch-depth: 0
+          # Use the App token so the workflow's pushes to a feature branch are
+          # authorized; the default GITHUB_TOKEN works for the same repo but the
+          # App token keeps the auth model consistent with the rest of the repo.
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Bump marketplace.json and open auto-merge PR
+        env:
+          # Payload values from the dispatching plugin repo. Treated as
+          # untrusted — validated against tight regexes before any use.
+          PLUGIN: ${{ github.event.client_payload.plugin }}
+          TAG: ${{ github.event.client_payload.tag }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          set -euo pipefail
+
+          # Validate dispatch payload shape.
+          if ! printf '%s' "$PLUGIN" | grep -qE '^[a-z0-9][a-z0-9-]*[a-z0-9]$'; then
+            echo "::error::invalid plugin name from dispatch: $PLUGIN"
+            exit 1
+          fi
+          if ! printf '%s' "$TAG" | grep -qE '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::error::invalid tag from dispatch: $TAG"
+            exit 1
+          fi
+
+          # Verify the plugin exists in marketplace.json.
+          current_ref=$(jq -r --arg p "$PLUGIN" \
+            '.plugins[] | select(.name==$p) | .source.ref // empty' \
+            .claude-plugin/marketplace.json)
+          if [ -z "$current_ref" ]; then
+            echo "::error::plugin '$PLUGIN' is not in marketplace.json"
+            exit 1
+          fi
+
+          # Idempotent: skip if already at this tag.
+          if [ "$current_ref" = "$TAG" ]; then
+            echo "marketplace.json already pins $PLUGIN at $TAG; nothing to do"
+            exit 0
+          fi
+
+          # Apply the bump.
+          jq --arg p "$PLUGIN" --arg t "$TAG" \
+            '(.plugins[] | select(.name==$p) | .source.ref) = $t' \
+            .claude-plugin/marketplace.json > .claude-plugin/marketplace.json.new
+          mv .claude-plugin/marketplace.json.new .claude-plugin/marketplace.json
+
+          # Branch, commit, push.
+          BRANCH="auto/bump-${PLUGIN}-${TAG}"
+          git checkout -b "$BRANCH"
+          git -c user.name='github-actions[bot]' \
+              -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+              commit -am "fix(${PLUGIN}): bump to ${TAG}"
+          git push origin "$BRANCH"
+
+          # Open PR + enable auto-merge. PR is App-authored (via GH_TOKEN env),
+          # so it triggers pull_request workflow events and CI runs on it.
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title "fix(${PLUGIN}): bump to ${TAG}" \
+            --body "Auto-bump from \`${PLUGIN}\` release ${TAG} via repository_dispatch from the plugin repo."
+
+          gh pr merge "$BRANCH" --auto --merge
