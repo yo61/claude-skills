@@ -1,0 +1,124 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions: {}
+
+jobs:
+  commitlint:
+    name: Conventional Commits
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: wagoid/commitlint-github-action@b948419dd99f3fd78a6548d48f94e3df7f6bf3ed  # v6.2.1
+        with:
+          configFile: commitlint.config.mjs
+
+  validate-marketplace:
+    name: Marketplace JSON validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Validate marketplace.json shape
+        run: |
+          set -euo pipefail
+          jq -e '
+            (.name | type) == "string" and
+            (.owner | type) == "object" and
+            (.owner.name | type) == "string" and
+            (.description | type) == "string" and
+            (.version | type) == "string" and
+            (.plugins | type) == "array" and
+            ([.plugins[] |
+              (.name | type) == "string" and
+              (.source | type) == "object" and
+              (.source.source | type) == "string"
+            ] | all)
+          ' .claude-plugin/marketplace.json
+
+  check-source-refs:
+    name: Check plugin source refs resolve
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Verify each plugin source ref exists and names match
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          # Inputs come from .claude-plugin/marketplace.json (committed in this repo,
+          # not from any external event). Each value is also validated against a
+          # tight regex before use in API calls, so an injection-attempting commit
+          # would fail validation before reaching `gh api`.
+          jq -c '.plugins[]' .claude-plugin/marketplace.json | while read -r plugin; do
+            name=$(printf '%s' "$plugin" | jq -r '.name')
+            src_type=$(printf '%s' "$plugin" | jq -r '.source.source')
+            ref=$(printf '%s' "$plugin" | jq -r '.source.ref // empty')
+
+            if [ -z "$ref" ]; then
+              echo "::warning::plugin '$name' has no ref pin; skipping check"
+              continue
+            fi
+
+            case "$src_type" in
+              github)
+                repo=$(printf '%s' "$plugin" | jq -r '.source.repo')
+                ;;
+              url)
+                url=$(printf '%s' "$plugin" | jq -r '.source.url')
+                # https://github.com/owner/repo[.git] -> owner/repo
+                repo=$(printf '%s' "$url" | sed -E 's|^https?://github\.com/||; s|\.git$||')
+                ;;
+              *)
+                echo "::warning::plugin '$name' uses source type '$src_type'; skipping ref check"
+                continue
+                ;;
+            esac
+
+            # Defensive validation: refs are alphanumerics, dots, hyphens, slashes,
+            # underscores. Repos are owner/name with the same character class.
+            if ! printf '%s' "$ref" | grep -qE '^[A-Za-z0-9._/-]+$'; then
+              echo "::error::plugin '$name': ref '$ref' contains invalid characters"
+              exit 1
+            fi
+            if ! printf '%s' "$repo" | grep -qE '^[A-Za-z0-9._-]+/[A-Za-z0-9._-]+$'; then
+              echo "::error::plugin '$name': resolved repo '$repo' is not a valid owner/name"
+              exit 1
+            fi
+
+            # Resolve ref as tag, then branch, then commit.
+            if gh api "repos/$repo/git/refs/tags/$ref" >/dev/null 2>&1; then
+              kind="tag"
+            elif gh api "repos/$repo/branches/$ref" >/dev/null 2>&1; then
+              kind="branch"
+            elif gh api "repos/$repo/commits/$ref" >/dev/null 2>&1; then
+              kind="commit"
+            else
+              echo "::error::plugin '$name': ref '$ref' does not exist in $repo"
+              exit 1
+            fi
+
+            # Verify the plugin.json at the ref still names this plugin.
+            plugin_name_at_ref=$(gh api "repos/$repo/contents/.claude-plugin/plugin.json?ref=$ref" --jq '.content' | base64 -d | jq -r '.name')
+            if [ "$plugin_name_at_ref" != "$name" ]; then
+              echo "::error::plugin '$name' pinned at $repo@$ref but plugin.json there is named '$plugin_name_at_ref'"
+              exit 1
+            fi
+
+            echo "✓ $name -> $repo@$ref ($kind)"
+          done
