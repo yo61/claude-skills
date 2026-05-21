@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.3.0](https://github.com/yo61/claude-skills/compare/v0.2.2...v0.3.0) (2026-05-21)
+
+
+### Features
+
+* add agent-team-topologies plugin ([f95a279](https://github.com/yo61/claude-skills/commit/f95a279b16b67c52ae0af550610b13556f440bb2))
+* add agent-team-topologies plugin ([02d91aa](https://github.com/yo61/claude-skills/commit/02d91aa3cdf144ab8ae4247c6c2b4a69f55ada24))
+
+
+### Bug Fixes
+
+* **agent-team-topologies:** pin to v1.1.0 ([f2c1cb7](https://github.com/yo61/claude-skills/commit/f2c1cb7b5020b9370b7cc4139eff31ccac5c4639))
+* **contributory-factors:** bump to v1.0.2 ([9c56eef](https://github.com/yo61/claude-skills/commit/9c56eef18a66a6c4c25afb777cc621fdd182e128))
+* **contributory-factors:** bump to v1.0.2 ([5fb8e79](https://github.com/yo61/claude-skills/commit/5fb8e790785f5cfb121e94e8c4b44b6277f8bbbf))
+* **reportlab-pdf:** bump to v1.2.2 ([70fba83](https://github.com/yo61/claude-skills/commit/70fba834bf16434e7f28e9bbf3955cdb9054af43))
+* **reportlab-pdf:** bump to v1.2.2 ([2b59f4e](https://github.com/yo61/claude-skills/commit/2b59f4ea20e0dd3fcdb94482fc60ec4f81fd8cab))
+
 ## [0.2.2](https://github.com/yo61/claude-skills/compare/v0.2.1...v0.2.2) (2026-05-18)
 
 
