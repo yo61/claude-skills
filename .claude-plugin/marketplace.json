@@ -48,6 +48,28 @@
         "url": "https://github.com/yo61/claude-plugin-reportlab-pdf.git",
         "ref": "v1.2.2"
       }
+    },
+    {
+      "name": "agent-team-topologies",
+      "description": "Reusable Claude Code agent team topology patterns. Includes the topology selector skill (interactive decision tree across 8 patterns: Parallel Explorers, Review Board, Competing Hypotheses, Feature Pod, Risky Refactor, Orchestrator-Only, Quality-Gated, Task Queue) plus 6 specialist subagents (explorer, architect, implementer, security-reviewer, perf-reviewer, test-reviewer).",
+      "category": "agent-orchestration",
+      "tags": [
+        "agents",
+        "subagents",
+        "multi-agent",
+        "agent-teams",
+        "orchestration",
+        "topology",
+        "parallel-agents",
+        "code-review",
+        "debugging",
+        "refactoring"
+      ],
+      "source": {
+        "source": "url",
+        "url": "https://github.com/yo61/agent-team-topologies.git",
+        "ref": "v1.1.0"
+      }
     }
   ]
 }
