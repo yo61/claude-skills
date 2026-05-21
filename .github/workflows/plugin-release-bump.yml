@@ -23,15 +23,20 @@ jobs:
         with:
           client-id: ${{ secrets.SEMANTIC_RELEASE_APP_CLIENT_ID }}
           private-key: ${{ secrets.SEMANTIC_RELEASE_APP_PRIVATE_KEY }}
+          # Scope the token to this repo only and drop everything else
+          # from the blanket installation grant.
           owner: ${{ github.repository_owner }}
+          repositories: claude-skills
+          permission-contents: write
+          permission-pull-requests: write
 
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
         with:
           fetch-depth: 0
-          # Use the App token so the workflow's pushes to a feature branch are
-          # authorized; the default GITHUB_TOKEN works for the same repo but the
-          # App token keeps the auth model consistent with the rest of the repo.
-          token: ${{ steps.app-token.outputs.token }}
+          # Don't persist credentials in .git/config (avoids leaking the App
+          # token through artifacts or subsequent steps). The run block below
+          # configures git auth explicitly via `gh auth setup-git`.
+          persist-credentials: false
 
       - name: Bump marketplace.json and open auto-merge PR
         env:
@@ -42,6 +47,10 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           set -euo pipefail
+
+          # Configure git to use the App token for push (checkout above does
+          # not persist credentials).
+          gh auth setup-git
 
           # Validate dispatch payload shape.
           if ! printf '%s' "$PLUGIN" | grep -qE '^[a-z0-9][a-z0-9-]*[a-z0-9]$'; then
