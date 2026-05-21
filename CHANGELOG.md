@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/yo61/claude-skills/compare/v0.3.0...v0.3.1) (2026-05-21)
+
+
+### Bug Fixes
+
+* **ci:** scope semantic-release App token and drop persisted creds ([78eb15e](https://github.com/yo61/claude-skills/commit/78eb15ec25e493cffd5f7003c536b46c1955609f))
+
 ## [0.3.0](https://github.com/yo61/claude-skills/compare/v0.2.2...v0.3.0) (2026-05-21)
 
 
