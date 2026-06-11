@@ -70,6 +70,27 @@
         "url": "https://github.com/yo61/agent-team-topologies.git",
         "ref": "v1.1.0"
       }
+    },
+    {
+      "name": "civi-mcp",
+      "description": "Read-only access to CiviCRM via APIv4. Bundles an MCP server with four generic query tools (list_entities, describe_entity, get, count) and a companion skill providing workflow heuristics and CRM domain knowledge. Prompts for site URL and API key at install time; the key is stored in the system keychain.",
+      "category": "CRM",
+      "tags": [
+        "civicrm",
+        "crm",
+        "mcp",
+        "apiv4",
+        "members",
+        "contributions",
+        "contacts",
+        "donors",
+        "nonprofit"
+      ],
+      "source": {
+        "source": "url",
+        "url": "https://github.com/yo61/civi-mcp.git",
+        "ref": "v0.1.1"
+      }
     }
   ]
 }
