@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.0](https://github.com/yo61/claude-skills/compare/v0.3.1...v0.4.0) (2026-06-11)
+
+
+### Features
+
+* add civi-mcp plugin (v0.1.1) ([256fc16](https://github.com/yo61/claude-skills/commit/256fc16f254c7ace7afea4dbcc26b87bbbd14f2b))
+* add civi-mcp plugin (v0.1.1) ([261a8cd](https://github.com/yo61/claude-skills/commit/261a8cd17579c7dc7f384f93e22f174133a4a73e))
+
 ## [0.3.1](https://github.com/yo61/claude-skills/compare/v0.3.0...v0.3.1) (2026-05-21)
 
 
