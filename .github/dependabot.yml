@@ -9,3 +9,15 @@ updates:
     groups:
       hooks:
         patterns: ["*"]
+
+  # GitHub Actions. Pins are SHAs with version comments; Dependabot
+  # rewrites both. Majors stay outside the group so they arrive singly.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
+    groups:
+      actions-minor-patch:
+        update-types: ["minor", "patch"]
