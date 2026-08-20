@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/yo61/claude-skills/compare/v0.4.0...v0.4.1) (2026-08-20)
+
+
+### Dependencies
+
+* bump the hooks group across 1 directory with 2 updates ([#43](https://github.com/yo61/claude-skills/issues/43)) ([1b5de74](https://github.com/yo61/claude-skills/commit/1b5de74418453b4f78454cab8ef08439c7b82f7b))
+
 ## [0.4.0](https://github.com/yo61/claude-skills/compare/v0.3.1...v0.4.0) (2026-06-11)
 
 
