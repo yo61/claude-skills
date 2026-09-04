@@ -91,6 +91,23 @@
         "url": "https://github.com/yo61/civi-mcp.git",
         "ref": "v0.1.1"
       }
+    },
+    {
+      "name": "lastlight-pr-gate",
+      "description": "Stops unreviewed commits reaching a remote: every push needs a local Last Light PR review recorded at that exact SHA, run with Last Light's own review skill pulled from npm.",
+      "category": "code-review",
+      "tags": [
+        "code-review",
+        "lastlight",
+        "git",
+        "pull-request",
+        "hooks"
+      ],
+      "source": {
+        "source": "url",
+        "url": "https://github.com/yo61/claude-plugin-lastlight-pr-gate.git",
+        "ref": "v0.1.1"
+      }
     }
   ]
 }
