@@ -108,6 +108,25 @@
         "url": "https://github.com/yo61/claude-plugin-lastlight-pr-gate.git",
         "ref": "v0.1.1"
       }
+    },
+    {
+      "name": "guardrails",
+      "description": "Two PreToolUse hooks on the Bash tool. The first refuses shell commands that are known-wrong on this machine and hands back the correct form: recursive grep, which, find -name, legacy toolchains, bash-only syntax that fails silently under zsh, and an unrecoverable rm -rf whose targets are not all disposable. The second gates git push -- it fetches the remote default branch (best-effort, 15s timeout) and DENIES a push whose branch is not a descendant of it, so a stale branch is rebased before the push rather than after CI has run against the wrong base. Pushing the default branch, deletions, tag-only pushes and --dry-run are not gated; opt a repo out with \"touch $(git rev-parse --git-dir)/git-rebase-gate-off\".",
+      "category": "hooks",
+      "tags": [
+        "hooks",
+        "guardrails",
+        "shell",
+        "zsh",
+        "ripgrep",
+        "safety",
+        "git"
+      ],
+      "source": {
+        "source": "url",
+        "url": "https://github.com/yo61/claude-plugin-guardrails.git",
+        "ref": "v0.2.1"
+      }
     }
   ]
 }
