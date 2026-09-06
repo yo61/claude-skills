@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.0](https://github.com/yo61/claude-skills/compare/v0.4.1...v0.5.0) (2026-09-06)
+
+
+### Features
+
+* add the guardrails plugin ([12824be](https://github.com/yo61/claude-skills/commit/12824be1fd60981228e7403df95f2365d1d422c9))
+* add the lastlight-pr-gate plugin ([#45](https://github.com/yo61/claude-skills/issues/45)) ([1cd1619](https://github.com/yo61/claude-skills/commit/1cd1619a1f078bf2a4c897faca3a882fce0c02f4))
+
 ## [0.4.1](https://github.com/yo61/claude-skills/compare/v0.4.0...v0.4.1) (2026-08-20)
 
 
