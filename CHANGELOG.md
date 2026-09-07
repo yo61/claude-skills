@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.1](https://github.com/yo61/claude-skills/compare/v0.5.0...v0.5.1) (2026-09-07)
+
+
+### Bug Fixes
+
+* bump civi-mcp to v0.1.2, and name both lastlight hooks ([7d02287](https://github.com/yo61/claude-skills/commit/7d0228742f75c2aa55fb4a54df9804f045f36cd0))
+* name both lastlight hooks ([a2831ff](https://github.com/yo61/claude-skills/commit/a2831ffe422bb0bed14b07a2fe9c3d924db92869))
+
 ## [0.5.0](https://github.com/yo61/claude-skills/compare/v0.4.1...v0.5.0) (2026-09-06)
 
 
