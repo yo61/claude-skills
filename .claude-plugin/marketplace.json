@@ -89,12 +89,12 @@
       "source": {
         "source": "url",
         "url": "https://github.com/yo61/civi-mcp.git",
-        "ref": "v0.1.1"
+        "ref": "v0.1.2"
       }
     },
     {
       "name": "lastlight-pr-gate",
-      "description": "Stops unreviewed commits reaching a remote: every push needs a local Last Light PR review recorded at that exact SHA, run with Last Light's own review skill pulled from npm.",
+      "description": "Two PreToolUse hooks. The first stops unreviewed commits reaching a remote: every push needs a local Last Light PR review recorded at that exact SHA, run with Last Light's own review skill pulled from npm. The second closes the same gate against the GitHub MCP server, which reaches GitHub without a shell and would otherwise walk past it -- create_pull_request, update_pull_request, push_files and create_or_update_file are DENIED, pointing at the gh command the first hook can verify. Read-only, merge, branch and issue tools are not gated.",
       "category": "code-review",
       "tags": [
         "code-review",
