@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.2](https://github.com/yo61/claude-skills/compare/v0.5.1...v0.5.2) (2026-09-11)
+
+
+### Dependencies
+
+* bump https://github.com/woodruffw/zizmor-pre-commit ([#51](https://github.com/yo61/claude-skills/issues/51)) ([42d3e05](https://github.com/yo61/claude-skills/commit/42d3e05cb880fa2cd32c62e73b0fcffc13c6a62e))
+
 ## [0.5.1](https://github.com/yo61/claude-skills/compare/v0.5.0...v0.5.1) (2026-09-07)
 
 
