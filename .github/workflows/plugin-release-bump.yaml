@@ -30,13 +30,6 @@ jobs:
           permission-contents: write
           permission-pull-requests: write
 
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
-        with:
-          # Don't persist credentials in .git/config (avoids leaking the App
-          # token through artifacts or subsequent steps). Nothing below uses git
-          # for auth: the commit is made through the API, not pushed.
-          persist-credentials: false
-
       - name: Bump marketplace.json and open auto-merge PR
         env:
           # Payload values from the dispatching plugin repo. Treated as
@@ -59,10 +52,22 @@ jobs:
             exit 1
           fi
 
+          # ONE commit of main anchors everything below: the content that is
+          # read, the content that is written, and expectedHeadOid.
+          #
+          # createCommitOnBranch REPLACES the file at that path against the
+          # parent tree -- it does not merge. Reading the file from a checkout
+          # while pinning expectedHeadOid to main's live HEAD is therefore a
+          # silent data-loss race: three plugin repos dispatch here, and a bump
+          # merged between the checkout and this step would be reverted by the
+          # stale snapshot when this PR auto-merged. Reading at $base_sha closes
+          # it, and the mutation fails loudly if main moves after that.
+          base_sha=$(gh api "repos/${REPO}/git/ref/heads/main" --jq .object.sha)
+          current_json=$(gh api "repos/${REPO}/contents/${FILE}?ref=${base_sha}" --jq .content | base64 -d)
+
           # Verify the plugin exists in marketplace.json.
-          current_ref=$(jq -r --arg p "$PLUGIN" \
-            '.plugins[] | select(.name==$p) | .source.ref // empty' \
-            .claude-plugin/marketplace.json)
+          current_ref=$(printf '%s' "$current_json" \
+            | jq -r --arg p "$PLUGIN" '.plugins[] | select(.name==$p) | .source.ref // empty')
           if [ -z "$current_ref" ]; then
             echo "::error::plugin '$PLUGIN' is not in marketplace.json"
             exit 1
@@ -73,12 +78,6 @@ jobs:
             echo "marketplace.json already pins $PLUGIN at $TAG; nothing to do"
             exit 0
           fi
-
-          # Apply the bump.
-          jq --arg p "$PLUGIN" --arg t "$TAG" \
-            '(.plugins[] | select(.name==$p) | .source.ref) = $t' \
-            .claude-plugin/marketplace.json > .claude-plugin/marketplace.json.new
-          mv .claude-plugin/marketplace.json.new .claude-plugin/marketplace.json
 
           # Commit through GraphQL createCommitOnBranch, so GitHub builds and
           # SIGNS the commit server-side.
@@ -104,18 +103,24 @@ jobs:
           # state rather than trusting it. A merged one needs no branch check:
           # main would already pin $TAG and the idempotency check above exits.
           if gh api "repos/${REPO}/git/ref/heads/${BRANCH}" > /dev/null 2>&1; then
-            open_prs=$(gh pr list --repo "$REPO" --head "$BRANCH" --state open --json number --jq 'length')
-            if [ "$open_prs" -gt 0 ]; then
+            prs=$(gh pr list --repo "$REPO" --head "$BRANCH" --state all --json state)
+            if [ "$(printf '%s' "$prs" | jq '[.[] | select(.state == "OPEN")] | length')" -gt 0 ]; then
               echo "a PR for ${BRANCH} is already open; nothing to do"
               exit 0
             fi
-            echo "::warning::${BRANCH} exists with no open PR, so an earlier run failed partway; recreating it"
+            # A closed PR is a DECISION, not a crash. Only "no PR ever existed"
+            # means a run died between creating the ref and opening the PR;
+            # anything else would silently reopen what someone closed on purpose.
+            if [ "$(printf '%s' "$prs" | jq 'length')" -gt 0 ]; then
+              echo "::warning::a PR for ${BRANCH} was closed without merging; not reopening it"
+              exit 0
+            fi
+            echo "::warning::${BRANCH} exists but no PR was ever opened for it, so an earlier run failed partway; recreating it"
             gh api -X DELETE "repos/${REPO}/git/refs/heads/${BRANCH}" > /dev/null
           fi
 
           # createCommitOnBranch commits onto an EXISTING branch, so create it
-          # at main's HEAD first; the mutation then adds the one commit.
-          base_sha=$(gh api "repos/${REPO}/git/ref/heads/main" --jq .object.sha)
+          # at the pinned commit first; the mutation then adds the one commit.
           gh api -X POST "repos/${REPO}/git/refs" \
             -f ref="refs/heads/${BRANCH}" -f sha="$base_sha" > /dev/null
 
@@ -125,7 +130,9 @@ jobs:
             --arg oid "$base_sha" \
             --arg headline "fix(${PLUGIN}): bump to ${TAG}" \
             --arg path "$FILE" \
-            --arg contents "$(base64 -w0 "$FILE")" \
+            --arg contents "$(printf '%s' "$current_json" \
+              | jq --arg p "$PLUGIN" --arg t "$TAG" '(.plugins[] | select(.name==$p) | .source.ref) = $t' \
+              | base64 -w0)" \
             '{query:"mutation($input:CreateCommitOnBranchInput!){createCommitOnBranch(input:$input){commit{oid}}}",
               variables:{input:{
                 branch:{repositoryNameWithOwner:$repo,branchName:$branch},
@@ -137,9 +144,10 @@ jobs:
           # Open PR + enable auto-merge. PR is App-authored (via GH_TOKEN env),
           # so it triggers pull_request workflow events and CI runs on it.
           gh pr create \
+            --repo "$REPO" \
             --base main \
             --head "$BRANCH" \
             --title "fix(${PLUGIN}): bump to ${TAG}" \
             --body "Auto-bump from \`${PLUGIN}\` release ${TAG} via repository_dispatch from the plugin repo."
 
-          gh pr merge "$BRANCH" --auto --merge
+          gh pr merge --repo "$REPO" "$BRANCH" --auto --merge
