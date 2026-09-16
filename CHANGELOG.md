@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.5.2](https://github.com/yo61/claude-skills/compare/v0.5.1...v0.5.2) (2026-09-16)
+
+
+### Bug Fixes
+
+* anchor the bump to one commit, and respect a closed PR ([a77433c](https://github.com/yo61/claude-skills/commit/a77433c6876df03f43c684380a28146b9f91bb3f))
+* **guardrails:** bump to v0.2.2 ([68e9c19](https://github.com/yo61/claude-skills/commit/68e9c19910d32330bd3e61846ebd78a0973753e4))
+* **guardrails:** bump to v0.2.2 ([2113c15](https://github.com/yo61/claude-skills/commit/2113c15f061fb1ce38215cc7771448b824f776f3))
+* judge the bump by its PR, not by a leftover branch ref ([86627e9](https://github.com/yo61/claude-skills/commit/86627e9d84378c70708cc8f565bd2f7cc1e0b804))
+* **lastlight-pr-gate:** bump to v0.2.0 ([37ad9a0](https://github.com/yo61/claude-skills/commit/37ad9a07e63c1700c95186ec0fc913b5f794ba00))
+* **lastlight-pr-gate:** bump to v0.2.0 ([3fc2074](https://github.com/yo61/claude-skills/commit/3fc2074377d02342f046801965592b0b1308072e))
+* **reportlab-pdf:** bump to v1.2.3 ([ca89c9f](https://github.com/yo61/claude-skills/commit/ca89c9fac736859f040fe28507d469b71ef4b7d2))
+* **reportlab-pdf:** bump to v1.2.3 ([2c4dbcf](https://github.com/yo61/claude-skills/commit/2c4dbcf44f2dca91c2372a45a329ff8ca5768c3d))
+* sign the marketplace bump commit so its PR can merge ([cdb8a1d](https://github.com/yo61/claude-skills/commit/cdb8a1d22b7fe65bd1bfd3f7eac8960c64c5cb2f))
+
 ## [0.5.1](https://github.com/yo61/claude-skills/compare/v0.5.0...v0.5.1) (2026-09-07)
 
 
