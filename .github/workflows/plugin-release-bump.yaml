@@ -32,10 +32,9 @@ jobs:
 
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
-          fetch-depth: 0
           # Don't persist credentials in .git/config (avoids leaking the App
-          # token through artifacts or subsequent steps). The run block below
-          # configures git auth explicitly via `gh auth setup-git`.
+          # token through artifacts or subsequent steps). Nothing below uses git
+          # for auth: the commit is made through the API, not pushed.
           persist-credentials: false
 
       - name: Bump marketplace.json and open auto-merge PR
@@ -45,12 +44,10 @@ jobs:
           PLUGIN: ${{ github.event.client_payload.plugin }}
           TAG: ${{ github.event.client_payload.tag }}
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          REPO: ${{ github.repository }}
+          FILE: .claude-plugin/marketplace.json
         run: |
           set -euo pipefail
-
-          # Configure git to use the App token for push (checkout above does
-          # not persist credentials).
-          gh auth setup-git
 
           # Validate dispatch payload shape.
           if ! printf '%s' "$PLUGIN" | grep -qE '^[a-z0-9][a-z0-9-]*[a-z0-9]$'; then
@@ -83,13 +80,47 @@ jobs:
             .claude-plugin/marketplace.json > .claude-plugin/marketplace.json.new
           mv .claude-plugin/marketplace.json.new .claude-plugin/marketplace.json
 
-          # Branch, commit, push.
+          # Commit through GraphQL createCommitOnBranch, so GitHub builds and
+          # SIGNS the commit server-side.
+          #
+          # main requires signed commits. A plain `git commit` here is unsigned,
+          # so the PR this opens can never merge -- and the App being a bypass
+          # actor on that ruleset does not help, because the last step enables
+          # AUTO-merge, and auto-merge ignores bypass actors. The PRs simply sat
+          # BLOCKED, silently, three of them before anyone noticed.
+          #
+          # The Contents REST API does NOT sign; only createCommitOnBranch and
+          # the web UI do. Same mechanism as homebrew-tap's commit-recipe-pr
+          # action, for the same reason.
           BRANCH="auto/bump-${PLUGIN}-${TAG}"
-          git checkout -b "$BRANCH"
-          git -c user.name='github-actions[bot]' \
-              -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
-              commit -am "fix(${PLUGIN}): bump to ${TAG}"
-          git push origin "$BRANCH"
+
+          # A re-dispatch of the same release must not add a second commit to a
+          # branch that already carries this bump.
+          if gh api "repos/${REPO}/git/ref/heads/${BRANCH}" > /dev/null 2>&1; then
+            echo "branch ${BRANCH} already exists; nothing to do"
+            exit 0
+          fi
+
+          # createCommitOnBranch commits onto an EXISTING branch, so create it
+          # at main's HEAD first; the mutation then adds the one commit.
+          base_sha=$(gh api "repos/${REPO}/git/ref/heads/main" --jq .object.sha)
+          gh api -X POST "repos/${REPO}/git/refs" \
+            -f ref="refs/heads/${BRANCH}" -f sha="$base_sha" > /dev/null
+
+          jq -nc \
+            --arg repo "$REPO" \
+            --arg branch "$BRANCH" \
+            --arg oid "$base_sha" \
+            --arg headline "fix(${PLUGIN}): bump to ${TAG}" \
+            --arg path "$FILE" \
+            --arg contents "$(base64 -w0 "$FILE")" \
+            '{query:"mutation($input:CreateCommitOnBranchInput!){createCommitOnBranch(input:$input){commit{oid}}}",
+              variables:{input:{
+                branch:{repositoryNameWithOwner:$repo,branchName:$branch},
+                message:{headline:$headline},
+                expectedHeadOid:$oid,
+                fileChanges:{additions:[{path:$path,contents:$contents}]}}}}' \
+            | gh api graphql --input - > /dev/null
 
           # Open PR + enable auto-merge. PR is App-authored (via GH_TOKEN env),
           # so it triggers pull_request workflow events and CI runs on it.
