@@ -94,11 +94,23 @@ jobs:
           # action, for the same reason.
           BRANCH="auto/bump-${PLUGIN}-${TAG}"
 
-          # A re-dispatch of the same release must not add a second commit to a
-          # branch that already carries this bump.
+          # A re-dispatch must not stack a second commit onto an open PR -- but
+          # the ref, the commit and the PR are three separate calls, so the ref
+          # existing does NOT mean the bump landed. A run that died between them
+          # leaves a branch with no commit and no PR, and treating that as done
+          # would make every later re-dispatch exit 0 having bumped nothing.
+          #
+          # So judge the outcome (is there a PR?) and heal the intermediate
+          # state rather than trusting it. A merged one needs no branch check:
+          # main would already pin $TAG and the idempotency check above exits.
           if gh api "repos/${REPO}/git/ref/heads/${BRANCH}" > /dev/null 2>&1; then
-            echo "branch ${BRANCH} already exists; nothing to do"
-            exit 0
+            open_prs=$(gh pr list --repo "$REPO" --head "$BRANCH" --state open --json number --jq 'length')
+            if [ "$open_prs" -gt 0 ]; then
+              echo "a PR for ${BRANCH} is already open; nothing to do"
+              exit 0
+            fi
+            echo "::warning::${BRANCH} exists with no open PR, so an earlier run failed partway; recreating it"
+            gh api -X DELETE "repos/${REPO}/git/refs/heads/${BRANCH}" > /dev/null
           fi
 
           # createCommitOnBranch commits onto an EXISTING branch, so create it
