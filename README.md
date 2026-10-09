@@ -12,6 +12,7 @@ A Claude Code plugin marketplace published by [yo61](https://github.com/yo61).
 | `civi-mcp` | [`yo61/civi-mcp`](https://github.com/yo61/civi-mcp) | Read-only CiviCRM access over APIv4. An MCP server with four generic query tools (`list_entities`, `describe_entity`, `get`, `count`) and a companion skill with CRM workflow heuristics. Prompts for site URL and API key at install time; the key is stored in the system keychain. |
 | `lastlight-pr-gate` | [`yo61/claude-plugin-lastlight-pr-gate`](https://github.com/yo61/claude-plugin-lastlight-pr-gate) | Two `PreToolUse` hooks. One stops unreviewed commits reaching a remote: every push needs a local Last Light PR review recorded at that exact SHA, run with Last Light's own review skill pulled from npm. The other closes the same gate against the GitHub MCP server, which reaches GitHub without a shell: `create_pull_request`, `update_pull_request`, `push_files` and `create_or_update_file` are **denied**, pointing at the `gh` command the first hook can verify. |
 | `guardrails` | [`yo61/claude-plugin-guardrails`](https://github.com/yo61/claude-plugin-guardrails) | Two `PreToolUse` hooks on the Bash tool. One blocks known-wrong shell commands (`grep -r`, `rg -rn`, `which`, `rm -rf`, `find -name`, legacy toolchains) and bash-only syntax that breaks under zsh, handing back the correct form. The other gates `git push`: it fetches the remote default branch and **denies** a push whose branch is not a descendant of it. |
+| `dependency-updates` | [`yo61/claude-plugin-dependency-updates`](https://github.com/yo61/claude-plugin-dependency-updates) | Keeps every pinned dependency current with Dependabot and self-hosted Renovate, each pin with exactly one owner. A skill to set up a repository or org, audit one for pins nothing updates, and give each new pin its owner, with the shared policy, templates and known pitfalls. |
 
 ## Use
 
@@ -25,6 +26,7 @@ In Claude Code:
 /plugin install civi-mcp
 /plugin install lastlight-pr-gate
 /plugin install guardrails
+/plugin install dependency-updates
 ```
 
 Refresh your local copy of the marketplace after a new release with:
