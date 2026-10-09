@@ -11,7 +11,7 @@ jobs:
   commitlint:
     name: Conventional Commits
     if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       pull-requests: read
     steps:
@@ -29,7 +29,7 @@ jobs:
 
   validate-marketplace:
     name: Marketplace JSON validation
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
@@ -53,7 +53,7 @@ jobs:
 
   check-source-refs:
     name: Check plugin source refs resolve
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       contents: read
     steps:
@@ -129,11 +129,14 @@ jobs:
 
   lint:
     name: lint
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
       - uses: j178/prek-action@4e14d07f9231acabce116ccfca13b13dd9755ece  # v3.0.0
+        env:
+          # renovate: datasource=github-releases depName=j178/prek extractVersion=^v(?<version>.+)$
+          PREK_VERSION: 0.5.4
         with:
-          prek-version: 0.4.13
+          prek-version: ${{ env.PREK_VERSION }}
