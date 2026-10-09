@@ -127,6 +127,23 @@
         "url": "https://github.com/yo61/claude-plugin-guardrails.git",
         "ref": "v0.2.2"
       }
+    },
+    {
+      "name": "dependency-updates",
+      "description": "Keep every pinned dependency current with Dependabot and self-hosted Renovate, each pin with exactly one owner. A skill that sets up a repository or org (inventory every pin, assign owners, write dependabot.yaml and renovate.json5, run Renovate from one runner per org as its own GitHub App, gate CI on known vulnerabilities), audits one for pins nothing updates or two things update, and gives each new pin its owner. Carries the shared policy, templates, local verification and known pitfalls.",
+      "category": "dependency-management",
+      "tags": [
+        "dependabot",
+        "renovate",
+        "dependencies",
+        "supply-chain",
+        "github-actions"
+      ],
+      "source": {
+        "source": "url",
+        "url": "https://github.com/yo61/claude-plugin-dependency-updates.git",
+        "ref": "v0.1.0"
+      }
     }
   ]
 }
