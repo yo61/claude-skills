@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.6.0](https://github.com/yo61/claude-skills/compare/v0.5.3...v0.6.0) (2026-10-10)
+
+
+### Features
+
+* add the dependency-updates plugin ([#68](https://github.com/yo61/claude-skills/issues/68)) ([b47783a](https://github.com/yo61/claude-skills/commit/b47783a3a7d4322a3911c2a497fcbea4c2c20f3f))
+
+
+### Bug Fixes
+
+* **lastlight-pr-gate:** bump to v0.2.2 ([8883802](https://github.com/yo61/claude-skills/commit/88838029dbae55a9fab2f622c2321ed61a4b792a))
+* **lastlight-pr-gate:** bump to v0.2.2 ([d9107d0](https://github.com/yo61/claude-skills/commit/d9107d07e97e7271f75d7e92aac5b18618ead30a))
+
 ## [0.5.3](https://github.com/yo61/claude-skills/compare/v0.5.2...v0.5.3) (2026-09-16)
 
 
