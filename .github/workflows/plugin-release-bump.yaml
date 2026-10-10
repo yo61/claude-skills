@@ -150,4 +150,4 @@ jobs:
             --title "fix(${PLUGIN}): bump to ${TAG}" \
             --body "Auto-bump from \`${PLUGIN}\` release ${TAG} via repository_dispatch from the plugin repo."
 
-          gh pr merge --repo "$REPO" "$BRANCH" --auto --merge
+          gh pr merge --repo "$REPO" "$BRANCH" --auto --squash
