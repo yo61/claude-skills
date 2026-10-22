@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.1](https://github.com/yo61/claude-skills/compare/v0.6.0...v0.6.1) (2026-10-22)
+
+
+### Bug Fixes
+
+* **agent-team-topologies:** bump to v1.1.1 ([#76](https://github.com/yo61/claude-skills/issues/76)) ([ddc40f0](https://github.com/yo61/claude-skills/commit/ddc40f056761f71bef7aae36e0bcae649d987eeb))
+* **guardrails:** bump to v0.3.0 ([#77](https://github.com/yo61/claude-skills/issues/77)) ([58f28a2](https://github.com/yo61/claude-skills/commit/58f28a2277749f3324844ae18a73878625dd5bae))
+
 ## [0.6.0](https://github.com/yo61/claude-skills/compare/v0.5.3...v0.6.0) (2026-10-19)
 
 
