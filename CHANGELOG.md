@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.5](https://github.com/yo61/claude-skills/compare/v0.6.4...v0.6.5) (2026-11-06)
+
+
+### Bug Fixes
+
+* **lastlight-pr-gate:** bump to v0.5.0 ([#89](https://github.com/yo61/claude-skills/issues/89)) ([b48e69f](https://github.com/yo61/claude-skills/commit/b48e69fe70d95bb91148ec852d68b0b1defd60b7))
+
 ## [0.6.4](https://github.com/yo61/claude-skills/compare/v0.6.3...v0.6.4) (2026-11-03)
 
 
